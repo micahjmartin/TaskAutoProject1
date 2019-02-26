@@ -7,5 +7,5 @@ do
 	echo $secondCount
 	ps | echo
 	secondCount=$(($secondCount + 5))
-	delay 5
+	sleep 5
 done
