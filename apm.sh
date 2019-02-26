@@ -1,16 +1,23 @@
 #!/bin/bash
 
+# Task Auto mini project 1
+# Launches all of the given programs and monitors them
+# Authors: Micah Martin (mjm5097), Paul Hulbert (), Jonathan Jang (jwj3737)
+
 function launch_programs() {
     # Launch all of the needed programs for APM to monitor
     programs="APM1 APM2 APM3 APM4 APM5 APM6"
+	# Identify the IP address of the 
     ip=`ifconfig | grep "eth3" -A 1 | tail -n 1 | awk '{print $2}'`
     echo "[*] Spawning processes...."
+	echo -n "[+] Launched PID's"
     for prog in $programs; do
         ./$prog $ip &>/dev/null & 
         pid=$!
-        echo "[+] Launched command: '$prog $ip' as PID $pid"
+        echo -n " $pid"
         PIDS="$PIDS $pid"
     done
+	echo ""
 }
 
 function cleanup() {
@@ -26,22 +33,18 @@ function cleanup() {
 
 function main() {
 	secondCount=0
+	sleepTime=5
 	while [ $secondCount -lt 901 ]
 	do
-		echo $secondCount
+		# Get all the PS information
 		ps aux > temp.txt
-		
 		result="$secondCount"
-		
-		for PID in $PIDS
-		do
+		# Get the %CPU and %MEM from the PIDS
+		for PID in $PIDS; do
 			result="$result,`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`"
-			
 		done
 		
 		echo $result
-		
-		secondCount=$(($secondCount + 5))
 		rm temp.txt
 		
 		#END OF PAUL'S PART
@@ -53,7 +56,9 @@ function main() {
 		
 		
 		#END OF JON'S PART
-		sleep 5
+		secondCount=$(($secondCount + $sleepTime))
+		echo "[*] Sleeping for $sleepTime seconds..."
+		sleep $sleepTime
 	done
 }
 
