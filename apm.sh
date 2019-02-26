@@ -9,11 +9,15 @@ do
 	echo $secondCount
 	ps aux > temp.txt
 	
+	result="$secondCount"
+	
 	for PID in $PIDS
 	do
-		result=`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`
-		echo "$secondCount,$result"
+		result="result,`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`"
+		
 	done
+	
+	echo result
 	
 	secondCount=$(($secondCount + 5))
 	rm temp.txt
