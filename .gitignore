@@ -1,3 +1,5 @@
 .*.swp
 *temp*
 nohup.out
+process_output.txt
+system_output.txt
