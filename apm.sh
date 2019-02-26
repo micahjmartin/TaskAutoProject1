@@ -9,5 +9,15 @@ do
 	cat temp.txt
 	secondCount=$(($secondCount + 5))
 	rm temp.txt
+	
+	#END OF PAUL'S PART
+	
+	
+	
+	
+	
+	
+	
+	#END OF JON'S PART
 	sleep 5
 done
