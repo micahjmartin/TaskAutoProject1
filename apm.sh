@@ -13,11 +13,11 @@ do
 	
 	for PID in $PIDS
 	do
-		result="result,`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`"
+		result="$result,`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`"
 		
 	done
 	
-	echo result
+	echo $result
 	
 	secondCount=$(($secondCount + 5))
 	rm temp.txt
