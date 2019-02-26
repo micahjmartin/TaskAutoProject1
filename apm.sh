@@ -11,7 +11,8 @@ do
 	
 	for PID in $PIDS
 	do
-		grep "$PID" temp.txt | awk '{ "$secondCount," print $3 "," $4 }' | cat
+		result=`grep "$PID" temp.txt |  awk '{print $3 "," $4}'`
+		echo "$secondCount,$result"
 	done
 	
 	secondCount=$(($secondCount + 5))
