@@ -34,7 +34,7 @@ function cleanup() {
 function main() {
     # Definitions for easy reference
     sleepTime=5
-    outputProcessFile="process_output.txt"
+    #outputProcessFile="process_output.txt"
     echo "[*] Starting process monitoring for 15 minutes"
     while [ $SECONDS -le 900 ]
     do
@@ -43,12 +43,27 @@ function main() {
         #ps aux > temp.txt
         result="$SECONDS"
         # Get the %CPU and %MEM from the PIDs
+        count=1
         for PID in $PIDS; do
-            result="$result,`ps -p $PID -o pcpu,pmem | tail -n+2 | awk '{print $1 "," $2}'`"
+            echo "$result,`ps -p $PID -o pcpu,pmem | tail -n+2 | awk '{print $1 "," $2}'`" >> "apm${count}_metrics.csv"
+            (( $count++ ))
         done
-        echo $result >> $outputProcessFile
+        #echo $result >> $outputProcessFile
 
         # TODO: Get the system stats here
+        ifstats=`ifstat ens33 | tail -n 2 | head -n 1`
+        rx_data=`echo $ifstats | awk '{print $6}'`
+        rx_rates=`echo $ifstats | awk '{print $7}'`
+        rx=$(($rx_data / $rx_rates))
+
+        tx_data=`echo $ifstats | awk '{print $8}'`
+        tx_rates=`echo $ifstats | awk '{print $9}'`
+        tx=$(($tx_data / $tx_rates))
+
+        hd_writes=`iostat -d sda | grep sda | awk '{print $4}'`
+        hd_util=`df -m / | tail -n+2 | awk '{print $4}'`
+
+        echo "$SECONDS,$tx,$rx,$hd_writes,$hd_utils" >> system_metrics.csv
 
         sleep $sleepTime
     done
