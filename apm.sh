@@ -63,7 +63,7 @@ function main() {
         hd_writes=`iostat -d sda | grep sda | awk '{print $4}'`
         hd_util=`df -m / | tail -n+2 | awk '{print $4}'`
 
-        echo "$SECONDS,$tx,$rx,$hd_writes,$hd_utils" >> system_metrics.csv
+        echo "$SECONDS,$tx,$rx,$hd_writes,$hd_util" >> system_metrics.csv
 
         sleep $sleepTime
     done
