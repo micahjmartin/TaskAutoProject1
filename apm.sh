@@ -46,7 +46,7 @@ function main() {
         count=1
         for PID in $PIDS; do
             echo "$result,`ps -p $PID -o pcpu,pmem | tail -n+2 | awk '{print $1 "," $2}'`" >> "apm${count}_metrics.csv"
-            (( $count++ ))
+            (( count++ ))
         done
         #echo $result >> $outputProcessFile
 
@@ -54,11 +54,11 @@ function main() {
         ifstats=`ifstat ens33 | tail -n 2 | head -n 1`
         rx_data=`echo $ifstats | awk '{print $6}'`
         rx_rates=`echo $ifstats | awk '{print $7}'`
-        rx=$(($rx_data / $rx_rates))
+        rx="$rx_data/$rx_rates"
 
         tx_data=`echo $ifstats | awk '{print $8}'`
         tx_rates=`echo $ifstats | awk '{print $9}'`
-        tx=$(($tx_data / $tx_rates))
+        tx="$tx_data/$tx_rates"
 
         hd_writes=`iostat -d sda | grep sda | awk '{print $4}'`
         hd_util=`df -m / | tail -n+2 | awk '{print $4}'`
