@@ -16,6 +16,7 @@ function launch_programs() {
         echo -n " $pid"
         PIDS="$PIDS $pid"
     done
+    ifstat -d 1
     echo ""
 }
 
@@ -27,6 +28,7 @@ function cleanup() {
         kill -9 $pid
         echo -n " $pid"
     done
+    killall -9 ifstat
     echo ""
     exit
 }
@@ -42,7 +44,6 @@ function getProcStats() {
 
 function getSystemStats() {
     # Get the system stats here
-    ifstat -d 1
     ifstats=`ifstat ens33 | tail -n 2 | head -n 1`
     # rx rates
     rx=`echo $ifstats | awk '{print $7}'`
@@ -62,10 +63,9 @@ function main() {
     echo "[*] Starting process monitoring for 15 minutes"
     while [ $SECONDS -le 900 ]
     do
+        sleep $sleepTime
         getProcStats
         getSystemStats
-
-        sleep $sleepTime
     done
 }
 
