@@ -44,11 +44,11 @@ function getProcStats() {
 
 function getSystemStats() {
     # Get the system stats here
-    ifstats=`ifstat ens33 | tail -n 2 | head -n 1`
+    ifstats=`ifstat ens33 | tail -n 2 | head -n 1` 2>/dev/null
     # rx rates
-    rx=`echo $ifstats | awk '{print $7}'`
+    rx=`echo $ifstats | awk '{print $7}' | sed 's:K::g'`
     # tx rates
-    tx=`echo $ifstats | awk '{print $9}'`
+    tx=`echo $ifstats | awk '{print $9}' | sed 's:K::g'`
     # hard drive writes
     hd_writes=`iostat -d sda | grep sda | awk '{print $4}'`
     # Hard drive usage
