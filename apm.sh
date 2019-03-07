@@ -42,15 +42,12 @@ function getProcStats() {
 
 function getSystemStats() {
     # Get the system stats here
+    ifstat -d 1
     ifstats=`ifstat ens33 | tail -n 2 | head -n 1`
     # rx rates
-    rx_data=`echo $ifstats | awk '{print $6}'`
-    rx_rates=`echo $ifstats | awk '{print $7}'`
-    rx="$rx_data/$rx_rates"
+    rx=`echo $ifstats | awk '{print $7}'`
     # tx rates
-    tx_data=`echo $ifstats | awk '{print $8}'`
-    tx_rates=`echo $ifstats | awk '{print $9}'`
-    tx="$tx_data/$tx_rates"
+    tx=`echo $ifstats | awk '{print $9}'`
     # hard drive writes
     hd_writes=`iostat -d sda | grep sda | awk '{print $4}'`
     # Hard drive usage
@@ -67,7 +64,7 @@ function main() {
     do
         getProcStats
         getSystemStats
-        
+
         sleep $sleepTime
     done
 }
